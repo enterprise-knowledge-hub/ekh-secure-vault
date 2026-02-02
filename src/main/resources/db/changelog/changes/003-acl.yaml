@@ -1,0 +1,42 @@
+databaseChangeLog:
+  - changeSet:
+      id: 003-create-document-acl-table
+      author: artur
+      changes:
+        - createTable:
+            schemaName: vault
+            tableName: document_acl
+            columns:
+              - column:
+                  name: id
+                  type: UUID
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: document_id
+                  type: UUID
+                  constraints:
+                    nullable: false
+              - column:
+                  name: sabject_type
+                  type: VARCHAR(20)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: permission
+                  type: VARCHAR(20)
+              - column:
+                  name: created_at
+                  type: timestamptz
+                  defaultValueComputed: CURRENT_TIMESTAMP
+
+        - addForeignKeyConstraint:
+            baseTableSchemaName: vault
+            baseTableName: document_acl
+            baseColumnNames: document_id
+            referencedTableSchemaName: vault
+            referencedTableName: documents
+            referencedColumnNames: id
+            constraintName: fk_document_acl_document
+                  
