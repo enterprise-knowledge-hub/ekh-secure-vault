@@ -1,0 +1,86 @@
+databaseChangeLog:
+  - changeSet:
+      id: 004-create-audit-table
+      author: artur
+      changes:
+        - createTable:
+            schemaName: vault
+            tableName: audit_logs
+            columns:
+              - column:
+                  name: id
+                  type: UUID
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: ts
+                  type: timestamptz
+                  defaultValueComputed: CURRENT_TIMESTAMP
+                  constraints:
+                    nullable: false
+              - column:
+                  name: actor_type
+                  type: VARCHAR(20)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: actor_id
+                  type: VARCHAR(100)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: action
+                  type: VARCHAR(50)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: resource_type
+                  type: VARCHAR(20)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: resource_id
+                  type: UUID
+                  constraints:
+                    nullable: false
+              - column:
+                  name: recource_version_id
+                  type: UUID
+                  constraints:
+                    nullable: true
+              - column:
+                  name: result
+                  type: VARCHAR(20)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: ip
+                  type: VARCHAR(45)
+                  constraints:
+                    nullable: true
+              - column:
+                  name: user_agent
+                  type: VARCHAR(255)
+                  constraints:
+                    nullable: true
+              - column:
+                  name: details
+                  type: JSONB
+                  constraints:
+                    nullable: true
+        - createIndex:
+            schemaName: vault
+            tableName: audit_logs
+            indexName: idx_audit_resource
+            columns:
+              - column:
+                  name: resource_id
+        - createIndex:
+            schemaName: vault
+            tableName: audit_logs
+            indexName: idx_audit_ts
+            columns:
+              - column:
+                  name: ts
+                  
