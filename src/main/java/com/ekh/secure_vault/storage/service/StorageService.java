@@ -1,6 +1,6 @@
 package com.ekh.secure_vault.storage.service;
 
-import java.io.ByteArrayInputStream;
+import java.io.InputStream;
 
 import org.springframework.stereotype.Service;
 
@@ -15,14 +15,14 @@ import lombok.RequiredArgsConstructor;
 public class StorageService {
     private final MinioClient minioClient;
     
-    public void storeFile(String bucketName, String objectName, byte[] data) {
+    public void storeFile(String bucketName, String objectName, InputStream in, long size, String contentType) {
         try {
             minioClient.putObject(
                 PutObjectArgs.builder()
                     .bucket(bucketName)
                     .object(objectName)
-                    .stream(new ByteArrayInputStream(data), data.length, -1)
-                    .contentType("application/octet-stream")
+                    .stream(in, size, -1)
+                    .contentType(contentType != null ? contentType : "application/octet-stream")
                     .build()
             );
         } catch (Exception e) {
