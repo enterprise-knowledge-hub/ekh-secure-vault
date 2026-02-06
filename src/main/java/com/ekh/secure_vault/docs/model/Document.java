@@ -9,8 +9,10 @@ import lombok.*;
 @Getter
 @Setter
 @Builder
+@NoArgsConstructor
+@AllArgsConstructor
 @Entity
-@Table(name = "documents")
+@Table(name = "documents", schema = "vault")
 public class Document {
     @Id @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
