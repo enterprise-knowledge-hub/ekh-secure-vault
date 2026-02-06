@@ -9,13 +9,13 @@ import io.minio.MinioClient;
 
 @Configuration
 public class MinioClientConfig {
-    @Value("${s3.endpoint}")
+    @Value("${minio.endpoint}")
     private String ENDPOINT;
 
-    @Value("${s3.secret-key}")
+    @Value("${minio.secret-key}")
     private String SECRET_KEY;
 
-    @Value("${s3.access-key}")
+    @Value("${minio.access-key}")
     private String ACCESS_KEY;
 
     @Bean
