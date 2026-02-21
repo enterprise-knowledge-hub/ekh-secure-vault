@@ -1,7 +1,9 @@
 package com.ekh.secure_vault.docs.model;
 
-import java.time.LocalDateTime;
+import java.time.Instant;
 import java.util.UUID;
+
+import com.ekh.secure_vault.docs.model.enums.*;
 
 import jakarta.persistence.*;
 import lombok.*;
@@ -14,19 +16,30 @@ import lombok.*;
 @Entity
 @Table(name = "document_acl", schema = "vault")
 public class DocumentAcl {
-    @Id @GeneratedValue(strategy = GenerationType.UUID)
+    @Id
     private UUID id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "document_id", nullable = false)
-    private Document document;
+    @Column(name = "document_id", nullable = false, unique = true)
+    private UUID documentId;
 
-    @Column(name = "subject_type", nullable = false, length = 20)
-    private String subjectType;
+    @Enumerated(EnumType.STRING)
+    @Column(name = "subject_type", nullable = false, length = 20, unique = true)
+    private SubjectType subjectType;
 
-    @Column(name = "permission", nullable = false, length = 20)
-    private String permission;
+    @Column(name = "subject_id", nullable = false, length = 100, unique = true)
+    private String subjectId;
 
-    @Column(name = "created_at", nullable = false)
-    private LocalDateTime createdAt;
+    @Enumerated(EnumType.STRING)
+    @Column(name = "permission", nullable = false, length = 20, unique = true)
+    private Permission permission;
+
+    @Column(name = "created_at", nullable = false, updatable = false)
+    private Instant createdAt;
+
+    @PrePersist
+    void prePersist() {
+        if (id == null)
+            id = UUID.randomUUID();
+        createdAt = Instant.now();
+    }
 }
