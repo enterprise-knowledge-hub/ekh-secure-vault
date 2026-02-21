@@ -24,8 +24,15 @@ databaseChangeLog:
                   constraints:
                     nullable: false
               - column:
+                  name: subject_id
+                  type: VARCHAR(100)
+                  constraints:
+                    nullable: false
+              - column:
                   name: permission
                   type: VARCHAR(20)
+                  constraints:
+                    nullable: false
               - column:
                   name: created_at
                   type: timestamptz
@@ -39,4 +46,17 @@ databaseChangeLog:
             referencedTableName: documents
             referencedColumnNames: id
             constraintName: fk_document_acl_document
+        
+        - addUniqueConstraint:
+            tableName: document_acl
+            schemaName: vault
+            columnNames: document_id, subject_type, subject_id, permission
+            constraintName: uq_document_acl_document_subject
+        
+        - createIndex:
+            tableName: document_acl
+            schemaName: vault
+            indexName: idx_document_acl_document
+            columnNames: document_id
+            
                   
