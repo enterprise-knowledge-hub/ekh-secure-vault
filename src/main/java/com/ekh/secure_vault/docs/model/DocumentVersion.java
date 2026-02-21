@@ -1,6 +1,6 @@
 package com.ekh.secure_vault.docs.model;
 
-import java.time.LocalDateTime;
+import java.time.Instant;
 import java.util.UUID;
 
 import jakarta.persistence.*;
@@ -14,12 +14,11 @@ import lombok.*;
 @Entity
 @Table(name = "document_versions", schema = "vault")
 public class DocumentVersion {
-    @Id @GeneratedValue(strategy = GenerationType.UUID)
+    @Id
     private UUID id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "document_id", nullable = false)
-    private Document document;
+    @Column(name = "document_id", nullable = false)
+    private UUID documentId;
 
     @Column(nullable = false)
     private int version;
@@ -39,11 +38,13 @@ public class DocumentVersion {
     @Column(name = "checksum_sha256", nullable = false, length = 255)
     private String checksumSha256;
 
-    @Column(name ="uploaded_at", nullable = false)
-    private LocalDateTime uploadedAt;
+    @Column(name = "uploaded_at", nullable = false)
+    private Instant uploadedAt;
 
     @PrePersist
-    protected void onUpload() {
-        this.uploadedAt = LocalDateTime.now();
+    void prePersist() {
+        if (id == null)
+            id = UUID.randomUUID();
+        uploadedAt = Instant.now();
     }
 }
