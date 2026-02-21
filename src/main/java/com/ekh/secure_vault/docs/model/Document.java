@@ -1,6 +1,6 @@
 package com.ekh.secure_vault.docs.model;
 
-import java.time.LocalDateTime;
+import java.time.Instant;
 import java.util.UUID;
 
 import jakarta.persistence.*;
@@ -14,9 +14,9 @@ import lombok.*;
 @Entity
 @Table(name = "documents", schema = "vault")
 public class Document {
-    @Id @GeneratedValue(strategy = GenerationType.UUID)
+    @Id
     private UUID id;
-    
+
     @Column(nullable = false, length = 255)
     private String title;
 
@@ -27,10 +27,13 @@ public class Document {
     private String createdByUserId;
 
     @Column(name = "created_at", nullable = false)
-    private LocalDateTime createdAt;
+    private Instant createdAt;
 
     @PrePersist
     protected void onCreate() {
-        this.createdAt = LocalDateTime.now();
+        if (this.id == null) {
+            this.id = UUID.randomUUID();
+        }
+        this.createdAt = Instant.now();
     }
 }
